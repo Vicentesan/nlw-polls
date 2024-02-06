@@ -25,6 +25,8 @@ export async function CreatePoll(app: FastifyInstance) {
       },
     })
 
-    return res.status(201).send({ success: true, pollId: newPoll.id })
+    return res
+      .status(201)
+      .send({ success: true, code: 201, pollId: newPoll.id })
   })
 }
