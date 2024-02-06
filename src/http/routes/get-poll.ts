@@ -4,16 +4,16 @@ import { FastifyInstance } from 'fastify'
 import z from 'zod'
 
 export async function GetPoll(app: FastifyInstance) {
-  app.get('/polls/:id', async (req, res) => {
+  app.get('/polls/:pollId', async (req, res) => {
     const getPollParamsSchema = z.object({
-      id: z.string().cuid(),
+      pollId: z.string().cuid(),
     })
 
-    const { id } = getPollParamsSchema.parse(req.params)
+    const { pollId } = getPollParamsSchema.parse(req.params)
 
     const poll = await db.poll.findUnique({
       where: {
-        id,
+        id: pollId,
       },
       include: {
         options: {

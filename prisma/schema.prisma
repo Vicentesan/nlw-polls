@@ -15,6 +15,7 @@ model Poll {
   title String
 
   options Option[]
+  votes   Vote[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -23,10 +24,28 @@ model Poll {
 model Option {
   id String @id @default(cuid())
 
-  title  String
+  title String
+
+  pollId String
+  poll   Poll   @relation(fields: [pollId], references: [id])
+
+  votes Vote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vote {
+  id        Int    @id @default(autoincrement())
+  sessionId String
+
+  optionId String
+  option   Option @relation(fields: [optionId], references: [id])
+
   pollId String
   poll   Poll   @relation(fields: [pollId], references: [id])
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@unique([sessionId, pollId])
 }

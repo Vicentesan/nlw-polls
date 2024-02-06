@@ -4,7 +4,8 @@ import 'dotenv/config'
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3333),
-  DATABASE_URL: z.string()
+  DATABASE_URL: z.string(),
+  COOKIE_SECRET: z.string().default('mysecret'),
 })
 
 const _env = envSchema.safeParse(process.env)
