@@ -10,7 +10,7 @@ import { VoteOnPoll } from './routes/vote-on-poll'
 export const app = fastify()
 
 app.register(cookie, {
-  secret: 'mysecret',
+  secret: env.COOKIE_SECRET,
   hook: 'onRequest',
 })
 
