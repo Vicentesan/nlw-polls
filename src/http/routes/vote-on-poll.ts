@@ -1,4 +1,5 @@
 import { db } from '@/lib/prisma'
+import { redis } from '@/lib/redis'
 import { randomUUID } from 'crypto'
 import { FastifyInstance } from 'fastify'
 
@@ -38,6 +39,8 @@ export async function VoteOnPoll(app: FastifyInstance) {
             id: userPreviousVoteOnPoll.id,
           },
         })
+
+        await redis.zincrby(pollId, -1, userPreviousVoteOnPoll.optionId)
       } else if (userPreviousVoteOnPoll) {
         return res.status(409).send({
           success: false,
@@ -65,6 +68,8 @@ export async function VoteOnPoll(app: FastifyInstance) {
         optionId,
       },
     })
+
+    await redis.zincrby(pollId, 1, optionId)
 
     return res.send({ success: true, code: 201, vote })
   })
