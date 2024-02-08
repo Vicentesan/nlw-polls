@@ -18,6 +18,19 @@ export async function VoteOnPoll(app: FastifyInstance) {
     const { pollId } = voteOnPollParamsSchema.parse(req.params)
     const { optionId } = voteOnPollBodySchema.parse(req.body)
 
+    const poll = await db.poll.findUnique({
+      where: {
+        id: pollId,
+      },
+    })
+
+    if (!poll)
+      return res.status(400).send({
+        success: false,
+        code: 400,
+        message: 'Poll not found',
+      })
+
     let { sessionId } = req.cookies
 
     if (sessionId) {
